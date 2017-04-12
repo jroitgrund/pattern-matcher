@@ -8,7 +8,7 @@ Includes TypeScript typings.
 
 ## Example:
 
-```
+```javascript
 import { Case, DefaultCase, match } from "pattern-matcher";
 
 
