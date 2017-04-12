@@ -7,6 +7,22 @@ export interface ICaseResult<R> {
 
 export type CaseFn<R> = (value: any) => ICaseResult<R>;
 
+export function NumberCase<R>(p: (n: number) => R): CaseFn<R> {
+    return (a) => {
+        const success = !!a && (typeof a === "number");
+        const result = success && p(a);
+        return { success, result };
+    };
+}
+
+export function StringCase<R>(p: (s: string) => R): CaseFn<R> {
+    return (a) => {
+        const success = !!a && (typeof a === "string");
+        const result = success && p(a);
+        return { success, result };
+    };
+}
+
 export function Case<R>(t: number, p: (n: number) => R): CaseFn<R>;
 export function Case<R>(t: string, p: (s: string) => R): CaseFn<R>;
 export function Case<T, R>(t: IType<T>, p: (t: T) => R): CaseFn<R>;

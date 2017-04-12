@@ -7,13 +7,15 @@
   "author": "Jonathan Roitgrund <jroitgrund@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "tslint -p tsconfig.json && tsc && mocha build/test --recursive"
+    "test": "tslint -p tsconfig.json && tsc && mocha build/test --recursive --reporter tap"
   },
   "devDependencies": {
     "@types/chai": "^3.5.0",
     "@types/mocha": "^2.2.40",
+    "@types/source-map-support": "^0.2.28",
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
+    "source-map-support": "^0.4.14",
     "tsc": "^1.20150623.0",
     "tslint": "^5.1.0",
     "typescript": "^2.2.2"
