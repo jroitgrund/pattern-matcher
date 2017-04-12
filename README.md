@@ -1,5 +1,7 @@
 # pattern-matcher
 
+[![CircleCI](https://circleci.com/gh/jroitgrund/pattern-matcher.svg?style=svg)](https://circleci.com/gh/jroitgrund/pattern-matcher)
+
 An NPM package for [rob3c](https://github.com/rob3c)'s implementation of pattern matching, from his [GitHub comment](https://github.com/Microsoft/TypeScript/issues/165#issuecomment-259598080).
 
 Includes TypeScript typings.
