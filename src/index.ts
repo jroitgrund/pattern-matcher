@@ -25,7 +25,7 @@ export function StringCase<R>(p: (s: string) => R): CaseFn<R> {
 
 export function Case<R>(t: number, p: (n: number) => R): CaseFn<R>;
 export function Case<R>(t: string, p: (s: string) => R): CaseFn<R>;
-export function Case<T, R>(t: IType<T>, p: (t: T) => R): CaseFn<R>;
+export function Case<T, R>(t: (x: any) => x is T | IType<T>, p: (t: T) => R): CaseFn<R>;
 export function Case<R>(t: boolean, p: () => R): CaseFn<R>;
 export function Case<R>(type: any, project: (t: any) => R): CaseFn<R> {
     return (a) => {
