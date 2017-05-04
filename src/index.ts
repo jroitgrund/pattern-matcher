@@ -1,3 +1,5 @@
+import "es6-promise";
+
 export interface IType<T> { new (...args: any[]): T; }
 
 export interface ICaseResult<R> {
@@ -62,4 +64,19 @@ export function match<A, R>(a: A, ...cases: Array<CaseFn<R>>): R {
         }
     }
     return undefined;
+}
+
+// Will wrap all return values in a Promise, so the whole matcher can be safely handled as a promise
+export function matchAsync<A, R>(a: A, ...cases: Array<CaseFn<Promise<R> | R>>): Promise<R> {
+    for (const c of cases) {
+        const r = c(a);
+        if (r.success) {
+            return Promise.resolve(r.result);
+        }
+    }
+    return undefined;
+}
+
+function isPromise(obj: any) {
+    return !!obj.then && typeof obj.then === "function";
 }
