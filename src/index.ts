@@ -1,4 +1,4 @@
-export interface IType<T> { new(...args: any[]): T; }
+export interface IType<T> { new (...args: any[]): T; }
 
 export interface ICaseResult<R> {
     success: boolean;
@@ -34,6 +34,17 @@ export function Case<R>(type: any, project: (t: any) => R): CaseFn<R> {
             typeof type === "boolean" && type ||
             typeof type === typeof a && type === a
         );
+
+        const result = success && project(a);
+        return { success, result };
+    };
+}
+
+export type TypeGuard<T> = (x: any) => x is T;
+export function TypeCase<T, R>(type: TypeGuard<T>, project: (t: T) => R): CaseFn<R> {
+    return (a) => {
+        const success = !!a && (typeof type === "function" && !!type(a));
+
         const result = success && project(a);
         return { success, result };
     };

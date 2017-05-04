@@ -1,7 +1,9 @@
 import { assert } from "chai";
+import { IQux, isQux } from "./typeGuardSample";
+
 import * as sourceMapSupport from "source-map-support";
 
-import { Case, DefaultCase, match, NumberCase, StringCase } from "../src/index";
+import { Case, DefaultCase, match, NumberCase, StringCase, TypeCase } from "../src/index";
 import OtherSampleClass from "./OtherSampleClass";
 import SampleClass from "./SampleClass";
 import UnmatchedClass from "./UnmatchedClass";
@@ -9,11 +11,13 @@ import UnmatchedClass from "./UnmatchedClass";
 sourceMapSupport.install();
 
 describe("match", () => {
+
     it("calls the right function depending on its type", () => {
         function testMatch(a: any): number {
             return match(a,
                 Case(SampleClass, (sampleClass) => sampleClass.myData),
                 Case(OtherSampleClass, (otherSampleClass) => otherSampleClass.myOtherData),
+                TypeCase(isQux, (qux) => qux.q),
                 Case(23, (n) => n + 1),
                 Case("asdf", (s) => s.length),
                 Case(a + 1 === 2, () => 2),
@@ -28,6 +32,9 @@ describe("match", () => {
 
         const otherSampleClass = new OtherSampleClass(2);
         assert.equal(testMatch(otherSampleClass), otherSampleClass.myOtherData);
+
+        const qux = { q: 3 };
+        assert.equal(testMatch(qux), qux.q);
 
         assert.equal(testMatch(23), 23 + 1);
 

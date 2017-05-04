@@ -1,3 +1,3 @@
 export default class SampleClass {
-    constructor(public myData: number) {}
+    constructor(public myData: number) { }
 }
