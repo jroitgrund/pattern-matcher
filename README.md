@@ -27,6 +27,12 @@ class OtherSampleClass {
 class UnmatchedClass {
 }
 
+export interface IQux { q: number; }
+
+export function isQux(obj: any): obj is IQux {
+    return !!obj && typeof obj === "object" && "q" in obj && typeof obj.q === "number";
+}
+
 
 function testMatch(a: any): number {
   return match(a,
@@ -34,6 +40,8 @@ function testMatch(a: any): number {
       Case(SampleClass, (sampleClass) => sampleClass.myData),
       // matches if argument is of type OtherSampleClass
       Case(OtherSampleClass, (otherSampleClass) => otherSampleClass.myOtherData),
+      // matches if a is an object with a number property named "q"
+      TypeCase(isQux, (qux) => qux.q),
       // matches if argument === 23
       Case(23, (n) => n + 1),
       // matches if argument === "asdf"
@@ -54,6 +62,9 @@ assert.equal(testMatch(sampleClass), sampleClass.myData);
 
 const otherSampleClass = new OtherSampleClass(2);
 assert.equal(testMatch(otherSampleClass), otherSampleClass.myOtherData);
+
+ const qux = { q: 3 };
+assert.equal(testMatch(qux), qux.q);
 
 assert.equal(testMatch(23), 23 + 1);
 

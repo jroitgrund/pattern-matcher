@@ -1,4 +1,6 @@
-export interface IType<T> { new(...args: any[]): T; }
+import "es6-promise";
+
+export interface IType<T> { new (...args: any[]): T; }
 
 export interface ICaseResult<R> {
     success: boolean;
@@ -34,6 +36,17 @@ export function Case<R>(type: any, project: (t: any) => R): CaseFn<R> {
             typeof type === "boolean" && type ||
             typeof type === typeof a && type === a
         );
+
+        const result = success && project(a);
+        return { success, result };
+    };
+}
+
+export type TypeGuard<T> = (x: any) => x is T;
+export function TypeCase<T, R>(type: TypeGuard<T>, project: (t: T) => R): CaseFn<R> {
+    return (a) => {
+        const success = !!a && (typeof type === "function" && !!type(a));
+
         const result = success && project(a);
         return { success, result };
     };
@@ -51,4 +64,19 @@ export function match<A, R>(a: A, ...cases: Array<CaseFn<R>>): R {
         }
     }
     return undefined;
+}
+
+// Will wrap all return values in a Promise, so the whole matcher can be safely handled as a promise
+export function matchAsync<A, R>(a: A, ...cases: Array<CaseFn<Promise<R> | R>>): Promise<R> {
+    for (const c of cases) {
+        const r = c(a);
+        if (r.success) {
+            return Promise.resolve(r.result);
+        }
+    }
+    return undefined;
+}
+
+function isPromise(obj: any) {
+    return !!obj.then && typeof obj.then === "function";
 }
